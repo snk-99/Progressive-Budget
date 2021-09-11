@@ -15,10 +15,12 @@ fetch("/api/transaction")
   });
 
 function populateTotal() {
-  // reduce transaction amounts to a single total value
-  let total = transactions.reduce((total, t) => {
-    return total + parseInt(t.value);
-  }, 0);
+  // reduce transaction to a single value
+  let total = transactions
+    .reduce((total, t) => {
+      return total + parseFloat(t.value);
+    }, 0)
+    .toFixed(2);
 
   let totalEl = document.querySelector("#total");
   totalEl.textContent = total;
@@ -41,7 +43,7 @@ function populateTable() {
 }
 
 function populateChart() {
-  // copy array and reverse it
+  // copy array then reverse it
   let reversed = transactions.slice().reverse();
   let sum = 0;
 
@@ -57,7 +59,7 @@ function populateChart() {
     return sum;
   });
 
-  // remove old chart if it exists
+  // removes old chart
   if (myChart) {
     myChart.destroy();
   }
@@ -72,7 +74,7 @@ function populateChart() {
         {
           label: "Total Over Time",
           fill: true,
-          backgroundColor: "#6666ff",
+          backgroundColor: "#FA8072",
           data,
         },
       ],
@@ -100,7 +102,7 @@ function sendTransaction(isAdding) {
     date: new Date().toISOString(),
   };
 
-  // if subtracting funds, convert amount to negative number
+  // subtracting
   if (!isAdding) {
     transaction.value *= -1;
   }
